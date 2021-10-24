@@ -1,0 +1,5 @@
+rootProject.name = 'FIleTransferTCP'
+include 'Server'
+include 'Client'
+include 'TransferProtocol'
+include 'Utils'

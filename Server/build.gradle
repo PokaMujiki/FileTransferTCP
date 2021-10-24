@@ -1,0 +1,23 @@
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+application {
+    mainClass = 'com.networkcourse.server.Main'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':TransferProtocol')
+    implementation project(':Utils')
+}
+
+shadowJar {
+    archiveBaseName.set('Server')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}
