@@ -1,0 +1,26 @@
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+application {
+    mainClass = 'com.networkcourse.server.Main'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':TransferProtocol')
+    implementation project(':Utils')
+    implementation 'ch.qos.logback:logback-core:1.2.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+}
+
+shadowJar {
+    archiveBaseName.set('Server')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}
