@@ -1,9 +1,7 @@
 package com.networkcourse.transferprotocol;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
+import javax.xml.crypto.Data;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -25,6 +23,16 @@ public class TransferProtocol {
         String fileName = input.readUTF();
         long fileSize =  input.readLong();
         return new DownloadingFileInfo(fileName, fileSize);
+    }
+
+    public static void sendFileContent(File file, DataOutputStream output) throws IOException {
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+        byte[] buf = new byte[BUFFER_SIZE];
+        int bytesRead = 0;
+        while ((bytesRead = bufferedInputStream.read(buf)) > 0) {
+            output.write(buf, 0, bytesRead);
+        }
+        bufferedInputStream.close();
     }
 
     public static void sendEndDownloadStatus(DataOutputStream output, long planedFileSize, long actualGotFileSize)

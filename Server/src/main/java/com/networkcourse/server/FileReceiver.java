@@ -10,6 +10,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileReceiver {
     private static final String DEFAULT_DIR_WITH_SEPARATOR = "uploads" + File.separator;
@@ -18,6 +20,7 @@ public class FileReceiver {
     private static final int INFO_MAX_LENGTH = 1000;
     private static final int MILLISECS_IN_SEC = 1000;
     private static final int BYTES_IN_KB = 1024;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileReceiver.class);
 
     private final Socket socket;
     private final DataInputStream input;
@@ -30,14 +33,13 @@ public class FileReceiver {
     private Instant startTime;
     private Instant periodStartTime;
 
+
     public FileReceiver(Socket socket) throws IOException {
         // try to create uploads folder if it's not created yet
         File uploads = new File(DEFAULT_DIR_WITH_SEPARATOR);
-        if (!uploads.exists()) {
-            if (!uploads.mkdir()) {
-                throw new IOException("Failed to create \"" + DEFAULT_DIR_WITH_SEPARATOR +
-                        "\" folder for downloading files");
-            }
+        if (!uploads.exists() && !uploads.mkdir()) {
+            throw new IOException("Failed to create \"" + DEFAULT_DIR_WITH_SEPARATOR +
+                    "\" folder for downloading files");
         }
 
         this.socket = socket;
@@ -69,8 +71,7 @@ public class FileReceiver {
             }
         }
         finally {
-            if (periodStartTime == null ||
-                    Duration.between(Instant.now(), periodStartTime).toMillis() < PERIOD_PRINT_SPEED) {
+            if (startTime.equals(periodStartTime)) {
                 Thread.sleep(PERIOD_PRINT_SPEED);
             }
             speedCounter.shutdown();
@@ -80,7 +81,7 @@ public class FileReceiver {
         TransferProtocol.sendEndDownloadStatus(output, info.getFileSize(), bytesReceived);
         socket.shutdownOutput();
 
-        System.out.println("File " + downloadingFile.getPath() + " downloaded");
+        LOGGER.info("File " + downloadingFile.getPath() + " downloaded");
     }
 
     private void printSpeed(File downloadingFile) {

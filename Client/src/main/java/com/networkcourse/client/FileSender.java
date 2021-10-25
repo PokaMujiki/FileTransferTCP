@@ -26,13 +26,7 @@ public class FileSender {
         TransferProtocol.sendHeaders(file, output);
 
         //send file content
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-        byte[] buf = new byte[TransferProtocol.BUFFER_SIZE];
-        int bytesRead = 0;
-        while ((bytesRead = bufferedInputStream.read(buf)) > 0) {
-            output.write(buf, 0, bytesRead);
-        }
-        bufferedInputStream.close();
+        TransferProtocol.sendFileContent(file, output);
         socket.shutdownOutput();
 
         // get server end of download reply

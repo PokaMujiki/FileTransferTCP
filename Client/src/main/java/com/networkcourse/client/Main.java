@@ -54,11 +54,9 @@ public class Main {
             }
         }
         catch (IOException e) {
+            System.err.println("Error sending file");
             if (e.getMessage() != null) {
-                System.out.println(e.getMessage());
-            }
-            else {
-                System.out.println("Error sending file");
+                System.err.println(e.getMessage());
             }
         }
     }
