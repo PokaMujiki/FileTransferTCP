@@ -3,10 +3,10 @@ NSU network course 2nd lab
 
 [Task](http://fit.ippolitov.me/CN_2/2021/2.html)
 
-##Requirements
+## Requirements
 Java 11 is necessary
 
-##Usage
+## Usage
 
 ### Build
 ```bash
